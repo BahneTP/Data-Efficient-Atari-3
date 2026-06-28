@@ -21,7 +21,7 @@ Stochastic Transformer-based World Model,STORM,STORM: Efficient Stochastic Trans
 Transformer-based World Model,TWM,Transformer-based World Models Are Happy With 100k Interactions,2023
 Imagination with auto-regression over an Inner Speech,IRIS,Transformers are Sample-Efficient World Models,2023
 Diffusion As a Model of Environment Dreams,DIAMOND,Diffusion for World Modeling: Visual Details Matter in Atari,2024
-EfficientZero V2,EZ-V2,EfficientZero V2: Mastering Discrete and Continuous Control with Limited Data,2024
+EfficientZero V2,EfficientZero-V2,EfficientZero V2: Mastering Discrete and Continuous Control with Limited Data,2024
 "Soft Actor-Critic Bigger, Better, Faster",SAC-BBF (RR2),Generalizing soft actor-critic algorithms to discrete action spaces,2024
 HarmonyDream applied to DreamerV3,HarmonyDream (DreamerV3),HarmonyDream: Task Harmonization Inside World Models,2024
 Recurrent Environment Model,REM,Improving Token-Based World Models with Parallel Observation Prediction,2024
