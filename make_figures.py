@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-import re
 
 import numpy as np
 import pandas as pd
@@ -35,8 +34,7 @@ TOP_N = 10
 CATEGORY_ORDER = ["Combat", "Maze", "Sports", "Other", "Action"]
 
 # Hard-code the methods you want to label in the scatter plots here.
-# Use the method names from analysis/Atari100k-Normalized.csv. Matching is
-# forgiving: capitalization, spaces, hyphens, and parentheses are ignored.
+# Use the method names exactly as they appear in the data tables.
 #
 # Examples:
 # LABEL_METHODS = ["DER", "SWM (4 frames)", "OTRainbow (100k)", "EfficientZero-V2"]
@@ -60,11 +58,6 @@ AUTO_LABEL_COUNT = 5
 # Set this to True once if you want to print all available method labels.
 PRINT_AVAILABLE_METHODS = False
 
-METHOD_ALIASES: dict[str, list[str]] = {
-    "ezv2": ["EfficientZero-V2", "EZ-V2"],
-    "efficientzerov2": ["EfficientZero-V2", "EZ-V2"],
-}
-
 
 def inverse_transform(values: np.ndarray | pd.Series) -> np.ndarray:
     """Inverse of log10(1 + max(HNS, 0))."""
@@ -78,43 +71,21 @@ def clean_label(value: str) -> str:
     return value.replace(", ", " + ")
 
 
-def normalize_method_label(value: str) -> str:
-    """Normalize labels for forgiving matching."""
-
-    return re.sub(r"[^a-z0-9]+", "", value.casefold())
-
-
 def resolve_label_methods(
     requested_methods: list[str],
     available_methods: pd.Index,
 ) -> list[str]:
     """Resolve requested method labels against available method names."""
 
-    available = list(available_methods)
-    available_set = set(available)
-    by_casefold = {method.casefold(): method for method in available}
-    by_normalized = {normalize_method_label(method): method for method in available}
+    available_set = set(available_methods)
 
     resolved: list[str] = []
     missing: list[str] = []
     for requested in requested_methods:
-        normalized = normalize_method_label(requested)
-        method = None
         if requested in available_set:
             method = requested
         else:
-            method = (
-                by_casefold.get(requested.casefold())
-                or by_normalized.get(normalized)
-            )
-            if method is None:
-                for alias in METHOD_ALIASES.get(normalized, []):
-                    method = (
-                        by_casefold.get(alias.casefold())
-                        or by_normalized.get(normalize_method_label(alias))
-                    )
-                    if method is not None:
-                        break
+            method = None
 
         if method is None:
             missing.append(requested)

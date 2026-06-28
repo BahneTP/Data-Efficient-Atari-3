@@ -85,32 +85,14 @@ The output files are written to `analysis/`.
 
 ## Figures
 
-Generate the recommended figures:
+### Predicted vs. true performance
 
-```bash
-python3 make_figures.py
-```
+![Predicted vs. true Atari-100k performance](figures/predicted_vs_true.png)
 
-This writes PNG and PDF versions to `figures/`:
+### Top candidate subsets
 
-- `predicted_vs_true`: predicted vs. true full Atari-100k median HNS.
-- `top_candidates`: top Atari-3 and validation candidates by CV RMSE.
-- `rank_and_correlation`: method-rank agreement and game-correlation heatmap.
+![Top Atari-3 and validation candidates](figures/top_candidates.png)
 
-By default, the scatter plots label only the five largest errors to keep the
-figures readable. To choose labels manually, edit the hard-coded settings at
-the top of `make_figures.py`:
+### Rank agreement and game correlations
 
-```python
-LABEL_METHODS = ["DER", "SWM (4 frames)", "OTRainbow (100k)", "SimPLe"]
-AUTO_LABEL_COUNT = 5
-```
-
-Selected labels are also highlighted as colored points. Matching is forgiving,
-so capitalization and punctuation are ignored; for example `efficientzero-v2`,
-`EfficientZero V2`, and `EfficientZero-V2` all resolve to the same method.
-
-If `LABEL_METHODS` is empty, the largest errors are labelled automatically
-without colored highlights. Set `AUTO_LABEL_COUNT = 0` for no automatic scatter
-labels. Set `PRINT_AVAILABLE_METHODS = True` once to print all available method
-labels.
+![Rank agreement and game-correlation heatmap](figures/rank_and_correlation.png)
