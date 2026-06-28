@@ -1,0 +1,43 @@
+Method Name,Abbreviation,Paper Title,Year
+Data-Efficient Rainbow,DER,When to use parametric models in reinforcement learning?,2019
+Contrastive Unsupervised Representations for Reinforcement Learning,CURL,CURL: Contrastive Unsupervised Representations for Reinforcement Learning,2020
+Overtrained Rainbow,OTRainbow (100k),Importance of using appropriate baselines for evaluation of data-efficiency in deep reinforcement learning for Atari,2020
+Self-Predictive Representations,SPR,Data-Efficient Reinforcement Learning with Self-Predictive Representations,2021
+Data-Regularized Q,DrQ,Image Augmentation Is All You Need: Regularizing Deep Reinforcement Learning from Pixels,2021
+EfficientZero,EfficientZero,Mastering Atari Games with Limited Data,2021
+PlayVirtual,PlayVirtual,PlayVirtual: Augmenting Cycle-Consistent Virtual Trajectories for Reinforcement Learning,2021
+SGI with mixed pretraining data and the standard ResNet,SGI-M,Pretraining Representations for Data-Efficient Reinforcement Learning,2021
+"Smaller World Model, default four-frame variant",SWM (4 frames),Smaller World Models for Reinforcement Learning,2021
+Action-Driven Auxiliary Task with Unbiased Sampling,ADAT+,Action-driven contrastive representation for reinforcement learning,2022
+Equivariant Representations with reward and group-equivariant transition losses,EqR (LR+LGET),EqR: Equivariant Representations for Data-Efficient Reinforcement Learning,2022
+Spectrally-Regularized Hyperbolic Mappings,S-RYM,Hyperbolic Deep Reinforcement Learning,2022
+Mask-based Latent Reconstruction,MLR,Mask-based Latent Reconstruction for Reinforcement Learning,2022
+Adaptive Local SIgnal MiXing,A-LIX,Stabilizing Off-Policy Deep Reinforcement Learning from Pixels,2022
+"Value-Consistent Representation Learning, five-step prediction",VCR-K5,Value-Consistent Representation Learning for Data-Efficient Reinforcement Learning,2022
+Barlow Twins for Reinforcement Learning,BarlowRL,BarlowRL: Barlow Twins for Data-Efficient Reinforcement Learning,2023
+"Bigger, Better, Faster",BBF (RR8),"Bigger, Better, Faster: Human-level Atari with human-level efficiency",2023
+Sample-Efficient Reinforcement Learning with Periodic Resets,SR-SPR (RR16),SAMPLE-EFFICIENT REINFORCEMENT LEARNING BY BREAKING THE REPLAY RATIO BARRIER,2023
+Stochastic Transformer-based World Model,STORM,STORM: Efficient Stochastic Transformer based World Models for Reinforcement Learning,2023
+Transformer-based World Model,TWM,Transformer-based World Models Are Happy With 100k Interactions,2023
+Imagination with auto-regression over an Inner Speech,IRIS,Transformers are Sample-Efficient World Models,2023
+Diffusion As a Model of Environment Dreams,DIAMOND,Diffusion for World Modeling: Visual Details Matter in Atari,2024
+EfficientZero V2,EZ-V2,EfficientZero V2: Mastering Discrete and Continuous Control with Limited Data,2024
+"Soft Actor-Critic Bigger, Better, Faster",SAC-BBF (RR2),Generalizing soft actor-critic algorithms to discrete action spaces,2024
+HarmonyDream applied to DreamerV3,HarmonyDream (DreamerV3),HarmonyDream: Task Harmonization Inside World Models,2024
+Recurrent Environment Model,REM,Improving Token-Based World Models with Parallel Observation Prediction,2024
+Discrete Abstract Representations for Transformer-based learning,DART,Learning to Play Atari in a World of Tokens,2024
+Mask-Enhanced Temporal Contrastive Learning for Smooth State Evolution,MOOSS,MOOSS: Mask-Enhanced Temporal Contrastive Learning for Smooth State Evolution in Visual Reinforcement Learning,2024
+DreamerV3,DreamerV3,Mastering Diverse Domains through World Models,2024
+Simulated Policy Learning,SimPLe,Model-Based Reinforcement Learning for Atari,2024
+Parallelized Model-based Reinforcement Learning,PaMoRL,Parallelizing Model-based Reinforcement Learning Over the Sequence Length,2024
+Mamba-Enabled Model-Based Reinforcement Learning,Drama (XS),Drama: Mamba-Enabled Model-Based Reinforcement Learning Is Sample and Parameter Efficient,2025
+Dynamic Modulation Dreamer,DyMoDreamer,DyMoDreamer: World Modeling with Dynamic Modulation,2025
+Enhancing Memory in Diffusion-based World Models via Linear-Time Sequence Modeling,EDELINE,EDELINE: Enhancing Memory in Diffusion-based World Models via Linear-Time Sequence Modeling,2025
+Full Network Capacity Framework,FNC,Full Network Capacity Framework for Sample-Efficient Deep Reinforcement Learning,2025
+Guardian extension of Reinforcement Learning with Prior Data,RLPD-GX,Guardian: Decoupling Exploration from Safety in Reinforcement Learning,2025
+Transformer-based World model with Contrastive Representations,TWISTER,Learning Transformer-based World Models with Contrastive Predictive Coding,2025
+Masked Generative Prior STORM,GIT-STORM,Masked Generative Priors Improve World Models Sequence Modelling Capabilities,2025
+Efficient MaskEd latent tRAnsformer worLD model,EMERALD,Accurate and Efficient World Modeling with Masked Latent Transformers,2026
+Object-Centric STORM,OC-STORM,Object-Centric World Models from Few-Shot Annotations for Sample-Efficient Reinforcement Learning,2026
+Joint Embedding DIffusion world model,JEDI,Performance Asymmetry in Model-Based Reinforcement Learning,2026
+Simulus,Simulus,Simulus: Combining Improvements in Sample-Efficient World Model Agents,2026

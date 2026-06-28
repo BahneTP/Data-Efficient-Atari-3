@@ -1,0 +1,56 @@
+{
+  "methodology": {
+    "hns": "100 * (score - random) / (human - random)",
+    "transform": "log10(1 + max(HNS, 0))",
+    "target": "log10(1 + max(median HNS across all 26 games, 0))",
+    "regression": "LinearRegression(fit_intercept=False)",
+    "cross_validation": "10-fold KFold(shuffle=True, random_state=1982)",
+    "candidate_prefilter": "lowest 2600 in-sample RMSE candidates, as in Atari-5"
+  },
+  "input": {
+    "results": "/home/bthiehl/Data-Efficient-Atari-3/data/Atari100k-Results.csv",
+    "human_reference": "/home/bthiehl/Data-Efficient-Atari-3/data/Atari-Human.csv",
+    "methods": 42,
+    "games": 26
+  },
+  "atari3_test": {
+    "games": [
+      "assault",
+      "bankheist",
+      "roadrunner"
+    ],
+    "n_methods": 42,
+    "train_rmse": 0.11333414856551792,
+    "cv_rmse": 0.12019403456358653,
+    "cv_mae": 0.09140243201173844,
+    "cv_r2": 0.7889387521773499,
+    "approximate_relative_error_pct": 21.04618774136307,
+    "coefficients": [
+      0.28717320075060804,
+      0.22894561900554938,
+      0.30964593963785775
+    ]
+  },
+  "atari2_validation": {
+    "games": [
+      "breakout",
+      "hero"
+    ],
+    "n_methods": 42,
+    "train_rmse": 0.14277384494995082,
+    "cv_rmse": 0.15188017017060307,
+    "cv_mae": 0.1240830301729799,
+    "cv_r2": 0.6629884193367169,
+    "approximate_relative_error_pct": 28.571173556983393,
+    "coefficients": [
+      0.250143974111052,
+      0.8571389909740568
+    ]
+  },
+  "overlap": [],
+  "outputs": {
+    "normalized_data": "/home/bthiehl/Data-Efficient-Atari-3/analysis/Atari100k-Normalized.csv",
+    "atari3_candidates": "/home/bthiehl/Data-Efficient-Atari-3/analysis/Atari3-candidates.csv",
+    "validation_candidates": "/home/bthiehl/Data-Efficient-Atari-3/analysis/Atari2-Validation-candidates.csv"
+  }
+}
