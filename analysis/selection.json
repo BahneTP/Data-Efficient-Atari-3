@@ -5,7 +5,7 @@
     "target": "log10(1 + max(median HNS across all 26 games, 0))",
     "regression": "LinearRegression(fit_intercept=False)",
     "cross_validation": "10-fold KFold(shuffle=True, random_state=1982)",
-    "candidate_prefilter": "lowest 57 in-sample RMSE candidates, as in Atari-5"
+    "candidate_prefilter": "lowest 2600 in-sample RMSE candidates, as in Atari-5"
   },
   "input": {
     "results": "/home/bthiehl/Data-Efficient-Atari-3/data/Atari100k-Results.csv",
