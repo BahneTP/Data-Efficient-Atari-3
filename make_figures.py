@@ -5,7 +5,7 @@ The script uses the already generated files in ``analysis/``:
 
 - Atari100k-Normalized.csv
 - Atari3-candidates.csv
-- Atari2-Validation-candidates.csv
+- Atari1-Validation-candidates.csv
 - selection.json
 
 It writes publication-style PNG and PDF figures to ``figures/``.
@@ -253,7 +253,7 @@ def plot_predicted_vs_true(
 ) -> None:
     subsets = [
         ("atari3_test", "Atari-3 test"),
-        ("atari2_validation", "Atari-2 validation"),
+        ("atari1_validation", "Atari-1 validation"),
     ]
 
     fig, axes = plt.subplots(1, 2, figsize=(11, 5), sharex=True, sharey=True)
@@ -330,7 +330,7 @@ def plot_predicted_vs_true(
 def plot_top_candidates(analysis_dir: Path, output_dir: Path, top_n: int) -> None:
     candidate_files = [
         ("Atari3-candidates.csv", "Atari-3 candidates"),
-        ("Atari2-Validation-candidates.csv", "Atari-2 validation candidates"),
+        ("Atari1-Validation-candidates.csv", "Atari-1 validation candidates"),
     ]
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))

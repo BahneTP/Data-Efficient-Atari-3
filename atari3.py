@@ -17,7 +17,7 @@ The necessary Atari-100k adaptations are:
 - use the 26 Atari-100k games and the validated Atari100k-Results.csv;
 - search directly over all three-game subsets because Atari-3 is the primary
   test set;
-- after selecting Atari-3, search for a disjoint two-game validation set.
+- after selecting Atari-3, search for a disjoint one-game validation set.
 """
 
 from __future__ import annotations
@@ -313,17 +313,17 @@ def main() -> None:
     )
 
     validation_candidates = [game for game in games if game not in atari3.games]
-    atari2_val, validation_finalists = search_subsets(
+    atari1_val, validation_finalists = search_subsets(
         validation_candidates,
-        subset_size=2,
+        subset_size=1,
         log_hns=log_hns,
         log_target=log_target,
-        top_k=args.top_k,
+        top_k=len(validation_candidates),
     )
 
     normalized_path = args.output_dir / "Atari100k-Normalized.csv"
     atari3_path = args.output_dir / "Atari3-candidates.csv"
-    validation_path = args.output_dir / "Atari2-Validation-candidates.csv"
+    validation_path = args.output_dir / "Atari1-Validation-candidates.csv"
     summary_path = args.output_dir / "selection.json"
 
     long_data.to_csv(normalized_path, index=False)
@@ -350,8 +350,8 @@ def main() -> None:
             "games": int(hns.shape[1]),
         },
         "atari3_test": result_for_json(atari3),
-        "atari2_validation": result_for_json(atari2_val),
-        "overlap": sorted(set(atari3.games) & set(atari2_val.games)),
+        "atari1_validation": result_for_json(atari1_val),
+        "overlap": sorted(set(atari3.games) & set(atari1_val.games)),
         "outputs": {
             "normalized_data": str(normalized_path.resolve()),
             "atari3_candidates": str(atari3_path.resolve()),
@@ -369,12 +369,12 @@ def main() -> None:
         f"  CV RMSE={atari3.cv_rmse:.6f}, "
         f"approx. relative error={atari3.approximate_relative_error_pct:.2f}%"
     )
-    print("Atari-2 validation:", ", ".join(atari2_val.games))
+    print("Atari-1 validation:", ", ".join(atari1_val.games))
     print(
-        f"  CV RMSE={atari2_val.cv_rmse:.6f}, "
-        f"approx. relative error={atari2_val.approximate_relative_error_pct:.2f}%"
+        f"  CV RMSE={atari1_val.cv_rmse:.6f}, "
+        f"approx. relative error={atari1_val.approximate_relative_error_pct:.2f}%"
     )
-    print("Overlap:", sorted(set(atari3.games) & set(atari2_val.games)))
+    print("Overlap:", sorted(set(atari3.games) & set(atari1_val.games)))
     print(f"Wrote analysis files to {args.output_dir.resolve()}")
 
 

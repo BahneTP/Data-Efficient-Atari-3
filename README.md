@@ -6,7 +6,7 @@ Atari-100k benchmark subset with the Atari-5 methodology.
 The selected split is:
 
 - Test games: `assault`, `bankheist`, `roadrunner`
-- Validation games: `breakout`, `hero`
+- Validation game: `jamesbond`
 
 ## Method
 
@@ -20,8 +20,8 @@ The script follows the core Atari-5 procedure:
 
 The split is selected sequentially. First, the three Atari-3 test games are
 chosen from all 26 Atari-100k games. After this test set is fixed, those three
-games are removed from the search space and the two validation games are chosen
-from the remaining 23 games. Thus, the validation set is disjoint from the
+games are removed from the search space and the one validation game is chosen
+from the remaining 23 games. Thus, the validation game is disjoint from the
 Atari-3 test set and is selected after the primary test set.
 
 ## Metrics to report
@@ -42,7 +42,7 @@ For the selected split:
 | Subset | Games | CV RMSE | CV R² | Approx. relative error |
 |---|---|---:|---:|---:|
 | Atari-3 test | `assault`, `bankheist`, `roadrunner` | 0.1202 | 0.7889 | 21.05% |
-| Atari-2 validation | `breakout`, `hero` | 0.1519 | 0.6630 | 28.57% |
+| Atari-1 validation | `jamesbond` | 0.1916 | 0.4637 | 32.79% |
 
 ## Repository layout
 
@@ -56,7 +56,7 @@ For the selected split:
 └── analysis/
     ├── selection.json
     ├── Atari3-candidates.csv
-    ├── Atari2-Validation-candidates.csv
+    ├── Atari1-Validation-candidates.csv
     └── Atari100k-Normalized.csv
 ```
 

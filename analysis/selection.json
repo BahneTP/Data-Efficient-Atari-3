@@ -5,7 +5,7 @@
     "target": "log10(1 + max(median HNS across all 26 games, 0))",
     "regression": "LinearRegression(fit_intercept=False)",
     "cross_validation": "10-fold KFold(shuffle=True, random_state=1982)",
-    "candidate_prefilter": "lowest 2600 in-sample RMSE candidates, as in Atari-5"
+    "candidate_prefilter": "lowest 57 in-sample RMSE candidates, as in Atari-5"
   },
   "input": {
     "results": "/home/bthiehl/Data-Efficient-Atari-3/data/Atari100k-Results.csv",
@@ -21,36 +21,34 @@
     ],
     "n_methods": 42,
     "train_rmse": 0.11333414856551792,
-    "cv_rmse": 0.12019403456358653,
-    "cv_mae": 0.09140243201173844,
-    "cv_r2": 0.7889387521773499,
-    "approximate_relative_error_pct": 21.04618774136307,
+    "cv_rmse": 0.12019403456358645,
+    "cv_mae": 0.09140243201173837,
+    "cv_r2": 0.7889387521773501,
+    "approximate_relative_error_pct": 21.046187741363052,
     "coefficients": [
-      0.28717320075060804,
-      0.22894561900554938,
-      0.30964593963785775
+      0.2871732007506081,
+      0.22894561900554933,
+      0.3096459396378577
     ]
   },
-  "atari2_validation": {
+  "atari1_validation": {
     "games": [
-      "breakout",
-      "hero"
+      "jamesbond"
     ],
     "n_methods": 42,
-    "train_rmse": 0.14277384494995082,
-    "cv_rmse": 0.15188017017060307,
-    "cv_mae": 0.1240830301729799,
-    "cv_r2": 0.6629884193367169,
-    "approximate_relative_error_pct": 28.571173556983393,
+    "train_rmse": 0.18559594232894056,
+    "cv_rmse": 0.19160071356148412,
+    "cv_mae": 0.14239579418861098,
+    "cv_r2": 0.46366403682957036,
+    "approximate_relative_error_pct": 32.78784330037438,
     "coefficients": [
-      0.250143974111052,
-      0.8571389909740568
+      0.7798615897781384
     ]
   },
   "overlap": [],
   "outputs": {
     "normalized_data": "/home/bthiehl/Data-Efficient-Atari-3/analysis/Atari100k-Normalized.csv",
     "atari3_candidates": "/home/bthiehl/Data-Efficient-Atari-3/analysis/Atari3-candidates.csv",
-    "validation_candidates": "/home/bthiehl/Data-Efficient-Atari-3/analysis/Atari2-Validation-candidates.csv"
+    "validation_candidates": "/home/bthiehl/Data-Efficient-Atari-3/analysis/Atari1-Validation-candidates.csv"
   }
 }
