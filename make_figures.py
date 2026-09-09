@@ -13,6 +13,7 @@ It writes publication-style PNG and PDF figures to ``figures/``.
 
 from __future__ import annotations
 
+import datetime
 import json
 from pathlib import Path
 
@@ -23,16 +24,16 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.ticker import ScalarFormatter
+from matplotlib.font_manager import FontProperties
+from matplotlib.ticker import LogLocator, MultipleLocator, NullLocator, ScalarFormatter
 
 
 ROOT = Path(__file__).resolve().parent
 ANALYSIS_DIR = ROOT / "analysis"
 OUTPUT_DIR = ROOT / "figures"
-CATEGORIES_PATH = ROOT / "data" / "Atari100k-Game-Categories.csv"
-TOP_N = 10
-CATEGORY_ORDER = ["Combat", "Maze", "Sports", "Other", "Action"]
-
+FIGURE_FONT = Path(
+    "/home/bthiehl/torchrl-hydra-template/plots/fonts/NewCM08-Regular.otf"
+)
 # Hard-code the methods you want to label in the scatter plots here.
 # Use the method names exactly as they appear in the data tables.
 #
@@ -47,13 +48,19 @@ LABEL_METHODS: list[str] = [
     "DER",
     "SimPLe",
     "BBF (RR8)",
-    "SAC-BBF (RR2)",
     "DreamerV3",
-    "EfficientZero",
-    "EfficientZero-V2",
     "SPR",
+    "SR-SPR (RR16)",
 ]
 AUTO_LABEL_COUNT = 5
+
+# Display text override for annotated points, keyed by the method name as it
+# appears in LABEL_METHODS / the data. Methods not listed here are annotated
+# with their raw method name.
+LABEL_DISPLAY_NAMES: dict[str, str] = {
+    "SR-SPR (RR16)": "SR-SPR",
+    "BBF (RR8)": "BBF",
+}
 
 # Set this to True once if you want to print all available method labels.
 PRINT_AVAILABLE_METHODS = False
@@ -63,12 +70,6 @@ def inverse_transform(values: np.ndarray | pd.Series) -> np.ndarray:
     """Inverse of log10(1 + max(HNS, 0))."""
 
     return (10**values) - 1
-
-
-def clean_label(value: str) -> str:
-    """Make game-combination labels compact for figures."""
-
-    return value.replace(", ", " + ")
 
 
 def resolve_label_methods(
@@ -98,17 +99,23 @@ def resolve_label_methods(
     return resolved
 
 
-def label_color_map(label_methods: list[str] | None) -> dict[str, tuple]:
+METHOD_COLORS: dict[str, str] = {
+    "DER": "#FFCCCC",
+    "SPR": "#FFCC99",
+    "SR-SPR (RR16)": "#CCE5FF",
+    "BBF (RR8)": "black",
+    "SimPLe": "#FFFF88",
+    "DreamerV3": "#CDEB8B",
+}
+
+
+def label_color_map(label_methods: list[str] | None) -> dict[str, str]:
     """Assign stable highlight colors to selected labelled methods."""
 
     if not label_methods:
         return {}
 
-    color_cycle = plt.get_cmap("tab10").colors
-    return {
-        method: color_cycle[index % len(color_cycle)]
-        for index, method in enumerate(label_methods)
-    }
+    return {method: METHOD_COLORS[method] for method in label_methods}
 
 
 def highlight_methods(
@@ -157,16 +164,19 @@ def annotate_methods(
         rows = data.loc[[method for method in label_methods if method in data.index]]
 
     for method, row in rows.iterrows():
-        color = "black"
-        if colors is not None and method in colors:
-            color = colors[method]
+        if method == "SR-SPR (RR16)":
+            xytext, ha = (4, 4), "left"
+        else:
+            xytext, ha = (-4, 4), "right"
         axis.annotate(
-            method,
+            LABEL_DISPLAY_NAMES.get(method, method),
             (row[x_column], row[y_column]),
-            xytext=(4, 4),
+            xytext=xytext,
             textcoords="offset points",
-            fontsize=7,
-            color=color,
+            fontsize=12,
+            color="black",
+            ha=ha,
+            va="bottom",
             zorder=5,
         )
 
@@ -191,31 +201,6 @@ def load_normalized_data(analysis_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame
     return method_data, log_hns
 
 
-def load_game_categories(path: Path) -> pd.Series:
-    categories = pd.read_csv(path).set_index("Game")["Category"]
-    return categories
-
-
-def sort_games_by_category(games: pd.Index, categories: pd.Series) -> list[str]:
-    category_rank = {
-        category: rank
-        for rank, category in enumerate(CATEGORY_ORDER)
-    }
-
-    missing_games = sorted(set(games) - set(categories.index))
-    if missing_games:
-        raise ValueError(f"Missing game categories: {missing_games}")
-
-    unknown_categories = sorted(set(categories.loc[list(games)]) - set(CATEGORY_ORDER))
-    if unknown_categories:
-        raise ValueError(f"Unknown game categories: {unknown_categories}")
-
-    return sorted(
-        games,
-        key=lambda game: (category_rank[categories.loc[game]], game),
-    )
-
-
 def predict_subset(
     selection: dict,
     subset_key: str,
@@ -237,10 +222,81 @@ def predict_subset(
 
 
 def save_figure(fig: plt.Figure, output_dir: Path, stem: str) -> None:
+    for text in fig.findobj(match=matplotlib.text.Text):
+        size = text.get_fontsize()
+        font = FontProperties(fname=FIGURE_FONT, size=size)
+        text.set_fontproperties(font)
+
     output_dir.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output_dir / f"{stem}.png", dpi=300, bbox_inches="tight")
     fig.savefig(output_dir / f"{stem}.pdf", bbox_inches="tight")
     plt.close(fig)
+
+
+def draw_predicted_vs_true(
+    axis: plt.Axes,
+    prediction: pd.DataFrame,
+    lower: float,
+    upper: float,
+    label_methods: list[str] | None,
+    colors: dict[str, str],
+    auto_label_count: int,
+    title: str | None = None,
+    show_xlabel: bool = True,
+    show_ylabel: bool = True,
+    show_y_ticklabels: bool = True,
+) -> None:
+    axis.scatter(
+        prediction["MedianHNS26"],
+        prediction["PredictedMedianHNS26"],
+        s=34,
+        color="#D6D6D6" if label_methods else "#4C78A8",
+        alpha=0.45 if label_methods else 0.82,
+        edgecolor="black",
+        linewidth=0.5,
+        zorder=2,
+    )
+    highlight_methods(
+        axis=axis,
+        data=prediction,
+        x_column="MedianHNS26",
+        y_column="PredictedMedianHNS26",
+        label_methods=label_methods,
+        colors=colors,
+    )
+    axis.plot([lower, upper], [lower, upper], color="black", linewidth=1)
+    axis.set_xscale("log")
+    axis.set_yscale("log")
+    axis.set_xlim(lower, upper)
+    axis.set_ylim(lower, upper)
+    axis.grid(True, which="both", alpha=0.22)
+    axis.xaxis.set_major_locator(LogLocator(base=10, subs=(1.0, 2.0, 5.0)))
+    axis.yaxis.set_major_locator(LogLocator(base=10, subs=(1.0, 2.0, 5.0)))
+    axis.xaxis.set_minor_locator(NullLocator())
+    axis.yaxis.set_minor_locator(NullLocator())
+    axis.xaxis.set_major_formatter(ScalarFormatter())
+    axis.yaxis.set_major_formatter(ScalarFormatter())
+    axis.tick_params(axis="both", which="major", labelsize=12)
+    axis.tick_params(axis="both", which="minor", labelsize=12)
+
+    annotate_methods(
+        axis=axis,
+        data=prediction,
+        x_column="MedianHNS26",
+        y_column="PredictedMedianHNS26",
+        ranking_column="AbsLogError",
+        label_methods=label_methods,
+        auto_label_count=auto_label_count,
+        colors=colors,
+    )
+
+    if show_ylabel:
+        axis.set_ylabel("Predicted median HNS", fontsize=16)
+    if not show_y_ticklabels:
+        axis.tick_params(axis="y", labelleft=False)
+    if show_xlabel:
+        axis.set_xlabel("True median HNS", fontsize=16)
+    if title is not None:
+        axis.set_title(title, fontsize=16)
 
 
 def plot_predicted_vs_true(
@@ -252,16 +308,17 @@ def plot_predicted_vs_true(
     auto_label_count: int,
 ) -> None:
     subsets = [
-        ("atari3_test", "Atari-3 test"),
-        ("atari1_validation", "Atari-1 validation"),
+        ("atari3_test", "predicted_vs_true_atari3", "Test Environments"),
+        ("atari1_validation", "predicted_vs_true_atari1", "Validation Environment"),
     ]
-
-    fig, axes = plt.subplots(1, 2, figsize=(11, 5), sharex=True, sharey=True)
 
     all_predictions = [
         predict_subset(selection, key, method_data, log_hns)
-        for key, _ in subsets
+        for key, _, _ in subsets
     ]
+    for prediction in all_predictions:
+        prediction["MedianHNS26"] /= 100
+        prediction["PredictedMedianHNS26"] /= 100
     colors = label_color_map(label_methods)
     min_value = min(
         min(prediction["MedianHNS26"].min(), prediction["PredictedMedianHNS26"].min())
@@ -274,158 +331,44 @@ def plot_predicted_vs_true(
     lower = max(1e-2, min_value * 0.75)
     upper = max_value * 1.25
 
-    for axis, (key, title), prediction in zip(axes, subsets, all_predictions):
-        subset = selection[key]
-        axis.scatter(
-            prediction["MedianHNS26"],
-            prediction["PredictedMedianHNS26"],
-            s=34,
-            color="#B8B8B8" if label_methods else "#4C78A8",
-            alpha=0.55 if label_methods else 0.82,
-            edgecolor="white",
-            linewidth=0.5,
-            zorder=2,
+    for (key, stem, title), prediction in zip(subsets, all_predictions):
+        fig, axis = plt.subplots(figsize=(5.5, 4.3))
+        draw_predicted_vs_true(
+            axis, prediction, lower, upper, label_methods, colors, auto_label_count
         )
-        highlight_methods(
-            axis=axis,
-            data=prediction,
-            x_column="MedianHNS26",
-            y_column="PredictedMedianHNS26",
-            label_methods=label_methods,
-            colors=colors,
+        fig.tight_layout()
+        save_figure(fig, output_dir, stem)
+
+    fig, axes = plt.subplots(1, 2, figsize=(9.5, 4.3))
+    for index, (axis, (key, stem, title), prediction) in enumerate(
+        zip(axes, subsets, all_predictions)
+    ):
+        draw_predicted_vs_true(
+            axis,
+            prediction,
+            lower,
+            upper,
+            label_methods,
+            colors,
+            auto_label_count,
+            title,
+            show_xlabel=False,
+            show_ylabel=index == 0,
+            show_y_ticklabels=index == 0,
         )
-        axis.plot([lower, upper], [lower, upper], color="black", linewidth=1)
-        axis.set_xscale("log")
-        axis.set_yscale("log")
-        axis.set_xlim(lower, upper)
-        axis.set_ylim(lower, upper)
-        axis.grid(True, which="both", alpha=0.22)
-        axis.set_title(
-            f"{title}\n"
-            f"CV RMSE={subset['cv_rmse']:.3f}, "
-            f"CV R²={subset['cv_r2']:.3f}"
-        )
-        axis.xaxis.set_major_formatter(ScalarFormatter())
-        axis.yaxis.set_major_formatter(ScalarFormatter())
-
-        annotate_methods(
-            axis=axis,
-            data=prediction,
-            x_column="MedianHNS26",
-            y_column="PredictedMedianHNS26",
-            ranking_column="AbsLogError",
-            label_methods=label_methods,
-            auto_label_count=auto_label_count,
-            colors=colors,
-        )
-
-    axes[0].set_ylabel("Predicted 26-game median HNS")
-    for axis in axes:
-        axis.set_xlabel("True 26-game median HNS")
-
-    fig.suptitle("Predicted vs. true Atari-100k performance", y=1.03)
-    save_figure(fig, output_dir, "predicted_vs_true")
-
-
-def plot_top_candidates(analysis_dir: Path, output_dir: Path, top_n: int) -> None:
-    candidate_files = [
-        ("Atari3-candidates.csv", "Atari-3 candidates"),
-        ("Atari1-Validation-candidates.csv", "Atari-1 validation candidates"),
-    ]
-
-    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-
-    for axis, (filename, title) in zip(axes, candidate_files):
-        candidates = pd.read_csv(analysis_dir / filename).head(top_n)
-        labels = [clean_label(value) for value in candidates["Games"]]
-        y_positions = np.arange(len(candidates))
-
-        axis.barh(y_positions, candidates["CV RMSE"], color="#4C78A8")
-        axis.set_yticks(y_positions)
-        axis.set_yticklabels(labels)
-        axis.invert_yaxis()
-        axis.set_xlabel("CV RMSE")
-        axis.set_title(title)
-        axis.grid(True, axis="x", alpha=0.25)
-
-        best = float(candidates["CV RMSE"].iloc[0])
-        axis.axvline(best, color="black", linewidth=1, alpha=0.75)
-
-    fig.suptitle(f"Top-{top_n} candidate subsets by cross-validated RMSE", y=1.03)
     fig.tight_layout()
-    save_figure(fig, output_dir, "top_candidates")
+    fig.subplots_adjust(bottom=0.16)
+    fig.text(0.5, 0.02, "True median HNS", ha="center", fontsize=16)
+    save_figure(fig, output_dir, "predicted_vs_true_combined")
 
 
-def plot_rank_and_correlation(
-    selection: dict,
-    method_data: pd.DataFrame,
+def plot_correlation(
     log_hns: pd.DataFrame,
     output_dir: Path,
-    label_methods: list[str] | None,
-    auto_label_count: int,
 ) -> None:
-    prediction = predict_subset(selection, "atari3_test", method_data, log_hns)
-    prediction["TrueRank"] = prediction["MedianHNS26"].rank(
-        ascending=False,
-        method="average",
-    )
-    prediction["PredictedRank"] = prediction["PredictedMedianHNS26"].rank(
-        ascending=False,
-        method="average",
-    )
-    spearman = prediction[["TrueRank", "PredictedRank"]].corr(
-        method="spearman",
-    ).iloc[0, 1]
-    colors = label_color_map(label_methods)
+    corr = log_hns.corr(method="pearson")
 
-    categories = load_game_categories(CATEGORIES_PATH)
-    sorted_games = sort_games_by_category(log_hns.columns, categories)
-    corr = log_hns.loc[:, sorted_games].corr(method="pearson")
-
-    fig = plt.figure(figsize=(14, 6))
-    grid = fig.add_gridspec(1, 2, width_ratios=[1.0, 1.35])
-    rank_axis = fig.add_subplot(grid[0, 0])
-    heatmap_axis = fig.add_subplot(grid[0, 1])
-
-    rank_axis.scatter(
-        prediction["TrueRank"],
-        prediction["PredictedRank"],
-        s=34,
-        color="#B8B8B8" if label_methods else "#4C78A8",
-        alpha=0.55 if label_methods else 0.82,
-        edgecolor="white",
-        linewidth=0.5,
-        zorder=2,
-    )
-    highlight_methods(
-        axis=rank_axis,
-        data=prediction,
-        x_column="TrueRank",
-        y_column="PredictedRank",
-        label_methods=label_methods,
-        colors=colors,
-    )
-    rank_axis.plot([1, len(prediction)], [1, len(prediction)], color="black", linewidth=1)
-    rank_axis.set_xlim(0.5, len(prediction) + 0.5)
-    rank_axis.set_ylim(len(prediction) + 0.5, 0.5)
-    rank_axis.set_xlabel("Rank by full 26-game median HNS")
-    rank_axis.set_ylabel("Rank predicted by Atari-3")
-    rank_axis.set_title(f"Method ranking agreement\nSpearman ρ={spearman:.3f}")
-    rank_axis.grid(True, alpha=0.25)
-
-    prediction = prediction.assign(
-        RankError=(prediction["PredictedRank"] - prediction["TrueRank"]).abs()
-    )
-    annotate_methods(
-        axis=rank_axis,
-        data=prediction,
-        x_column="TrueRank",
-        y_column="PredictedRank",
-        ranking_column="RankError",
-        label_methods=label_methods,
-        auto_label_count=auto_label_count,
-        colors=colors,
-    )
+    fig, heatmap_axis = plt.subplots(figsize=(9, 6))
 
     image = heatmap_axis.imshow(
         corr,
@@ -434,54 +377,79 @@ def plot_rank_and_correlation(
         vmax=1,
         aspect="auto",
     )
-    heatmap_axis.set_title("Game correlation across methods\nPearson r of log-HNS")
     heatmap_axis.set_xticks(np.arange(len(corr.columns)))
     heatmap_axis.set_xticklabels(corr.columns, rotation=90)
     heatmap_axis.set_yticks(np.arange(len(corr.index)))
     heatmap_axis.set_yticklabels(corr.index)
     heatmap_axis.tick_params(axis="both", labelsize=7)
 
-    category_boundaries: list[int] = []
-    previous_category = categories.loc[corr.columns[0]]
-    for index, game in enumerate(corr.columns[1:], start=1):
-        category = categories.loc[game]
-        if category != previous_category:
-            category_boundaries.append(index)
-            previous_category = category
-
-    for boundary in category_boundaries:
-        heatmap_axis.axhline(boundary - 0.5, color="black", linewidth=0.8)
-        heatmap_axis.axvline(boundary - 0.5, color="black", linewidth=0.8)
-
-    category_spans: list[tuple[str, int, int]] = []
-    start = 0
-    previous_category = categories.loc[corr.columns[0]]
-    for index, game in enumerate(corr.columns[1:], start=1):
-        category = categories.loc[game]
-        if category != previous_category:
-            category_spans.append((previous_category, start, index - 1))
-            start = index
-            previous_category = category
-    category_spans.append((previous_category, start, len(corr.columns) - 1))
-
-    for category, start, end in category_spans:
-        center = (start + end) / 2
-        heatmap_axis.text(
-            center,
-            -1.8,
-            category,
-            ha="center",
-            va="bottom",
-            fontsize=8,
-            fontweight="bold",
-            clip_on=False,
-        )
-
     colorbar = fig.colorbar(image, ax=heatmap_axis, fraction=0.046, pad=0.04)
-    colorbar.set_label("Correlation")
+    colorbar.set_label("Correlation", fontsize=16)
 
     fig.tight_layout()
-    save_figure(fig, output_dir, "rank_and_correlation")
+    save_figure(fig, output_dir, "correlation")
+
+
+def plot_hns_over_time(analysis_dir: Path, output_dir: Path) -> None:
+    """Scatter of release date vs. mean HNS for a fixed set of methods.
+
+    Rainbow is not part of the fitted Atari100k data (it predates the
+    100k-step benchmark), so its point uses the mean HNS=0.222 reported in
+    the SimPLe paper, rescaled to the same 0-100+ percentage scale as the
+    HNS values for the other methods.
+    """
+
+    long_data = pd.read_csv(analysis_dir / "Atari100k-Normalized.csv")
+    mean_hns = long_data.groupby("Method")["HNS"].mean()
+
+    records = [
+        ("Rainbow", "2017-10", 0.222 * 100 / 100, "white"),
+        ("DER", "2019-06", float(mean_hns.loc["DER"]) / 100, "#FFCCCC"),
+        ("SPR", "2021-05", float(mean_hns.loc["SPR"]) / 100, "#FFCC99"),
+        ("SR-SPR", "2023-02", float(mean_hns.loc["SR-SPR (RR16)"]) / 100, "#CCE5FF"),
+        ("BBF", "2023-11", float(mean_hns.loc["BBF (RR8)"]) / 100, "black"),
+    ]
+
+    dates = [datetime.datetime.strptime(date, "%Y-%m") for _, date, _, _ in records]
+    values = [value for _, _, value, _ in records]
+    point_colors = [color for _, _, _, color in records]
+
+    fig, axis = plt.subplots(figsize=(7, 3.5))
+    axis.scatter(
+        dates,
+        values,
+        s=60,
+        color=point_colors,
+        edgecolor="black",
+        linewidth=0.8,
+        zorder=3,
+    )
+
+    for (label, _, _, _), date, value in zip(records, dates, values):
+        if label == "BBF":
+            xytext, ha, va = (0, 10), "center", "bottom"
+        else:
+            xytext, ha, va = (4, 4), "left", "bottom"
+        axis.annotate(
+            label,
+            (date, value),
+            xytext=xytext,
+            textcoords="offset points",
+            fontsize=16,
+            ha=ha,
+            va=va,
+            zorder=5,
+        )
+
+    axis.grid(True, alpha=0.22)
+    axis.yaxis.set_major_locator(MultipleLocator(0.2))
+    axis.tick_params(axis="both", which="major", labelsize=12)
+    axis.set_xlabel("Release date", fontsize=16)
+    axis.set_ylabel("Mean HNS", fontsize=16)
+
+    fig.autofmt_xdate()
+    fig.tight_layout()
+    save_figure(fig, output_dir, "hns_over_time")
 
 
 def main() -> None:
@@ -508,15 +476,8 @@ def main() -> None:
         label_methods,
         AUTO_LABEL_COUNT,
     )
-    plot_top_candidates(ANALYSIS_DIR, OUTPUT_DIR, TOP_N)
-    plot_rank_and_correlation(
-        selection,
-        method_data,
-        log_hns,
-        OUTPUT_DIR,
-        label_methods,
-        AUTO_LABEL_COUNT,
-    )
+    plot_correlation(log_hns, OUTPUT_DIR)
+    plot_hns_over_time(ANALYSIS_DIR, OUTPUT_DIR)
 
     print(f"Wrote figures to {OUTPUT_DIR.resolve()}")
 

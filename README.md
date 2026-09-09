@@ -83,16 +83,6 @@ python3 atari3.py --top-k 2600
 
 The output files are written to `analysis/`.
 
-## Figures
+See [FIGURES.md](FIGURES.md) for the generated figures and how to build them.
 
-### Predicted vs. true performance
-
-![Predicted vs. true Atari-100k performance](figures/predicted_vs_true.png)
-
-### Top candidate subsets
-
-![Top Atari-3 and validation candidates](figures/top_candidates.png)
-
-### Rank agreement and game correlations
-
-![Rank agreement and game-correlation heatmap](figures/rank_and_correlation.png)
+![Predicted vs. true Atari-100k performance](figures/predicted_vs_true_combined.pdf)

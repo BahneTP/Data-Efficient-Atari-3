@@ -1,0 +1,43 @@
+Abbreviation,CitationKey,Citation
+DER,hasselt_when_2019,\cite{hasselt_when_2019}
+CURL,srinivas_curl_2020,\cite{srinivas_curl_2020}
+OTRainbow (100k),kielak_importance_2020,\cite{kielak_importance_2020}
+SPR,schwarzer_data-efficient_2021,\cite{schwarzer_data-efficient_2021}
+DrQ,kostrikov_image_2021,\cite{kostrikov_image_2021}
+EfficientZero,ye_mastering_2021,\cite{ye_mastering_2021}
+PlayVirtual,yu_playvirtual_2021,\cite{yu_playvirtual_2021}
+SGI-M,schwarzer_pretraining_2021,\cite{schwarzer_pretraining_2021}
+SWM (4 frames),robine_smaller_2021,\cite{robine_smaller_2021}
+ADAT+,kim_action-driven_2022,\cite{kim_action-driven_2022}
+EqR (LR+LGET),mondal_eqr_2022,\cite{mondal_eqr_2022}
+S-RYM,cetin_hyperbolic_2022,\cite{cetin_hyperbolic_2022}
+MLR,yu_mask-based_2022,\cite{yu_mask-based_2022}
+A-LIX,cetin_stabilizing_2022,\cite{cetin_stabilizing_2022}
+VCR-K5,yue_value-consistent_2022,\cite{yue_value-consistent_2022}
+BarlowRL,cagatan_barlowrl_2023,\cite{cagatan_barlowrl_2023}
+BBF (RR8),schwarzer_bigger_2023,\cite{schwarzer_bigger_2023}
+SR-SPR (RR16),doro_sample-efficient_2023,\cite{doro_sample-efficient_2023}
+STORM,zhang_storm_2023,\cite{zhang_storm_2023}
+TWM,robine_transformer-based_2023,\cite{robine_transformer-based_2023}
+IRIS,micheli_transformers_2023,\cite{micheli_transformers_2023}
+DIAMOND,alonso_diffusion_2024,\cite{alonso_diffusion_2024}
+EfficientZero-V2,wang_efficientzero_2024,\cite{wang_efficientzero_2024}
+SAC-BBF (RR2),zhang_generalizing_2024,\cite{zhang_generalizing_2024}
+HarmonyDream,ma_harmonydream_2024,\cite{ma_harmonydream_2024}
+REM,cohen_improving_2024,\cite{cohen_improving_2024}
+DART,agarwal_learning_2024,\cite{agarwal_learning_2024}
+MOOSS,sun_mooss_2024,\cite{sun_mooss_2024}
+DreamerV3,hafner_mastering_2024,\cite{hafner_mastering_2024}
+SimPLe,kaiser_model-based_2024,\cite{kaiser_model-based_2024}
+PaMoRL,wang_parallelizing_2024,\cite{wang_parallelizing_2024}
+Drama (XS),wang_drama_2025,\cite{wang_drama_2025}
+DyMoDreamer,zhang_dymodreamer_2025,\cite{zhang_dymodreamer_2025}
+EDELINE,lee_edeline_2025,\cite{lee_edeline_2025}
+FNC,yang_full_2025,\cite{yang_full_2025}
+RLPD-GX,cai_guardian_2025,\cite{cai_guardian_2025}
+TWISTER,burchi_learning_2025,\cite{burchi_learning_2025}
+GIT-STORM,meo_masked_2025,\cite{meo_masked_2025}
+EMERALD,burchi_accurate_2026,\cite{burchi_accurate_2026}
+OC-STORM,zhang_object-centric_2026,\cite{zhang_object-centric_2026}
+JEDI,lim_performance_2026,\cite{lim_performance_2026}
+Simulus,cohen_simulus_2026,\cite{cohen_simulus_2026}

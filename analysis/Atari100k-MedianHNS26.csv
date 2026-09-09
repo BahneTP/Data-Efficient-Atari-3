@@ -1,0 +1,43 @@
+Method,MedianHNS26,Paper Title,Year,Citation
+DER,16.13615779546773,When to use parametric models in reinforcement learning?,2019,\cite{hasselt_when_2019}
+CURL,17.528544107323352,CURL: Contrastive Unsupervised Representations for Reinforcement Learning,2020,\cite{srinivas_curl_2020}
+OTRainbow (100k),20.534440488418756,Importance of using appropriate baselines for evaluation of data-efficiency in deep reinforcement learning for Atari,2020,\cite{kielak_importance_2020}
+SPR,41.53937840436183,Data-Efficient Reinforcement Learning with Self-Predictive Representations,2021,\cite{schwarzer_data-efficient_2021}
+DrQ,26.75572528875417,Image Augmentation Is All You Need: Regularizing Deep Reinforcement Learning from Pixels,2021,\cite{kostrikov_image_2021}
+EfficientZero,109.01793044067236,Mastering Atari Games with Limited Data,2021,\cite{ye_mastering_2021}
+PlayVirtual,47.22321375716537,PlayVirtual: Augmenting Cycle-Consistent Virtual Trajectories for Reinforcement Learning,2021,\cite{yu_playvirtual_2021}
+SGI-M,67.8712587584073,Pretraining Representations for Data-Efficient Reinforcement Learning,2021,\cite{schwarzer_pretraining_2021}
+SWM (4 frames),7.306603049160349,Smaller World Models for Reinforcement Learning,2021,\cite{robine_smaller_2021}
+ADAT+,20.593651434517465,Action-driven contrastive representation for reinforcement learning,2022,\cite{kim_action-driven_2022}
+EqR (LR+LGET),39.8262626881728,EqR: Equivariant Representations for Data-Efficient Reinforcement Learning,2022,\cite{mondal_eqr_2022}
+S-RYM,36.60169864309663,Hyperbolic Deep Reinforcement Learning,2022,\cite{cetin_hyperbolic_2022}
+MLR,42.81655634296138,Mask-based Latent Reconstruction for Reinforcement Learning,2022,\cite{yu_mask-based_2022}
+A-LIX,41.08526151126942,Stabilizing Off-Policy Deep Reinforcement Learning from Pixels,2022,\cite{cetin_stabilizing_2022}
+VCR-K5,45.69954568746384,Value-Consistent Representation Learning for Data-Efficient Reinforcement Learning,2022,\cite{yue_value-consistent_2022}
+BarlowRL,29.60014174092189,BarlowRL: Barlow Twins for Data-Efficient Reinforcement Learning,2023,\cite{cagatan_barlowrl_2023}
+BBF (RR8),91.70508703990858,"Bigger, Better, Faster: Human-level Atari with human-level efficiency",2023,\cite{schwarzer_bigger_2023}
+SR-SPR (RR16),68.45072579702106,SAMPLE-EFFICIENT REINFORCEMENT LEARNING BY BREAKING THE REPLAY RATIO BARRIER,2023,\cite{doro_sample-efficient_2023}
+STORM,58.19479803918963,STORM: Efficient Stochastic Transformer based World Models for Reinforcement Learning,2023,\cite{zhang_storm_2023}
+TWM,50.5326797265526,Transformer-based World Models Are Happy With 100k Interactions,2023,\cite{robine_transformer-based_2023}
+IRIS,28.879973014599173,Transformers are Sample-Efficient World Models,2023,\cite{micheli_transformers_2023}
+DIAMOND,37.3414986628634,Diffusion for World Modeling: Visual Details Matter in Atari,2024,\cite{alonso_diffusion_2024}
+EfficientZero-V2,123.46687202171356,EfficientZero V2: Mastering Discrete and Continuous Control with Limited Data,2024,\cite{wang_efficientzero_2024}
+SAC-BBF (RR2),90.24530586973256,Generalizing soft actor-critic algorithms to discrete action spaces,2024,\cite{zhang_generalizing_2024}
+HarmonyDream,67.05328441667231,HarmonyDream: Task Harmonization Inside World Models,2024,\cite{ma_harmonydream_2024}
+REM,28.03543500190649,Improving Token-Based World Models with Parallel Observation Prediction,2024,\cite{cohen_improving_2024}
+DART,78.9974526866686,Learning to Play Atari in a World of Tokens,2024,\cite{agarwal_learning_2024}
+MOOSS,41.254904556736776,MOOSS: Mask-Enhanced Temporal Contrastive Learning for Smooth State Evolution in Visual Reinforcement Learning,2024,\cite{sun_mooss_2024}
+DreamerV3,49.41736146234015,Mastering Diverse Domains through World Models,2024,\cite{hafner_mastering_2024}
+SimPLe,13.406831673431276,Model-Based Reinforcement Learning for Atari,2024,\cite{kaiser_model-based_2024}
+PaMoRL,71.75341398737558,Parallelizing Model-based Reinforcement Learning Over the Sequence Length,2024,\cite{wang_parallelizing_2024}
+Drama (XS),26.972803190494798,Drama: Mamba-Enabled Model-Based Reinforcement Learning Is Sample and Parameter Efficient,2025,\cite{wang_drama_2025}
+DyMoDreamer,76.38893576648215,DyMoDreamer: World Modeling with Dynamic Modulation,2025,\cite{zhang_dymodreamer_2025}
+EDELINE,81.70267098113341,EDELINE: Enhancing Memory in Diffusion-based World Models via Linear-Time Sequence Modeling,2025,\cite{lee_edeline_2025}
+FNC,89.54507026980362,Full Network Capacity Framework for Sample-Efficient Deep Reinforcement Learning,2025,\cite{yang_full_2025}
+RLPD-GX,125.89596236880286,Guardian: Decoupling Exploration from Safety in Reinforcement Learning,2025,\cite{cai_guardian_2025}
+TWISTER,77.2566600761552,Learning Transformer-based World Models with Contrastive Predictive Coding,2025,\cite{burchi_learning_2025}
+GIT-STORM,42.62828131145916,Masked Generative Priors Improve World Models Sequence Modelling Capabilities,2025,\cite{meo_masked_2025}
+EMERALD,51.34314858149878,Accurate and Efficient World Modeling with Masked Latent Transformers,2026,\cite{burchi_accurate_2026}
+OC-STORM,43.76878503548439,Object-Centric World Models from Few-Shot Annotations for Sample-Efficient Reinforcement Learning,2026,\cite{zhang_object-centric_2026}
+JEDI,36.09065953831599,Performance Asymmetry in Model-Based Reinforcement Learning,2026,\cite{lim_performance_2026}
+Simulus,98.16636353503677,Simulus: Combining Improvements in Sample-Efficient World Model Agents,2026,\cite{cohen_simulus_2026}

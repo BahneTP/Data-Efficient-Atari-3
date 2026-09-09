@@ -23,7 +23,7 @@ Imagination with auto-regression over an Inner Speech,IRIS,Transformers are Samp
 Diffusion As a Model of Environment Dreams,DIAMOND,Diffusion for World Modeling: Visual Details Matter in Atari,2024
 EfficientZero V2,EfficientZero-V2,EfficientZero V2: Mastering Discrete and Continuous Control with Limited Data,2024
 "Soft Actor-Critic Bigger, Better, Faster",SAC-BBF (RR2),Generalizing soft actor-critic algorithms to discrete action spaces,2024
-HarmonyDream applied to DreamerV3,HarmonyDream (DreamerV3),HarmonyDream: Task Harmonization Inside World Models,2024
+HarmonyDream applied to DreamerV3,HarmonyDream,HarmonyDream: Task Harmonization Inside World Models,2024
 Recurrent Environment Model,REM,Improving Token-Based World Models with Parallel Observation Prediction,2024
 Discrete Abstract Representations for Transformer-based learning,DART,Learning to Play Atari in a World of Tokens,2024
 Mask-Enhanced Temporal Contrastive Learning for Smooth State Evolution,MOOSS,MOOSS: Mask-Enhanced Temporal Contrastive Learning for Smooth State Evolution in Visual Reinforcement Learning,2024
